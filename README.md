@@ -4,6 +4,8 @@ A read-only terminal app for browsing, searching, and reading an Obsidian vault.
 
 The app is built with Node.js, TypeScript, React, Ink, ESM, and npm. Stage 1 is intentionally read-only: it indexes markdown files, renders notes in the terminal, supports basic search, and lets you follow simple Obsidian wiki links.
 
+![](https://zenteno.org/public_assets/obsidian-tui-reader-001.png)
+
 ## Features
 
 - Open a local Obsidian vault folder.
