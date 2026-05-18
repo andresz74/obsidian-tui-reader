@@ -13,7 +13,10 @@
     "dev": "tsx src/cli.tsx",
     "build": "tsc",
     "start": "node dist/cli.js",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepare": "npm run build",
+    "install:global": "sh ./install.sh",
+    "uninstall:global": "sh ./uninstall.sh"
   },
   "dependencies": {
     "ink": "^5.1.0",

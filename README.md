@@ -23,10 +23,55 @@ The app is built with Node.js, TypeScript, React, Ink, ESM, and npm. Stage 1 is 
 
 ## Installation
 
-Install dependencies:
+### Easy Install From GitHub
+
+Clone and install globally:
+
+```bash
+git clone https://github.com/andresz74/obsidian-tui-reader.git
+cd obsidian-tui-reader
+./install.sh
+```
+
+Then run it from any terminal directory:
+
+```bash
+obsidian-tui-reader /path/to/your/obsidian-vault
+```
+
+Or use your `.env` configuration and run:
+
+```bash
+obsidian-tui-reader
+```
+
+### One-Line Install
+
+If you trust the script, you can install from GitHub in one command:
+
+```bash
+install_dir="${XDG_DATA_HOME:-$HOME/.local/share}/obsidian-tui-reader" && rm -rf "$install_dir" && git clone --depth 1 https://github.com/andresz74/obsidian-tui-reader.git "$install_dir" && sh "$install_dir/install.sh"
+```
+
+You can also install directly through npm from GitHub:
+
+```bash
+npm install -g github:andresz74/obsidian-tui-reader
+```
+
+### Local Development Install
+
+From this checkout:
 
 ```bash
 npm install
+npm run install:global
+```
+
+To remove the global local link:
+
+```bash
+./uninstall.sh
 ```
 
 ## Running In Development
@@ -68,6 +113,31 @@ If `VAULT_PATH` is set in `.env`, this also works:
 
 ```bash
 npm start
+```
+
+## Global CLI Usage
+
+This package exposes a binary named `obsidian-tui-reader`.
+
+For local development, the recommended global install is:
+
+```bash
+npm run install:global
+```
+
+This builds the app and runs `npm link`, making `obsidian-tui-reader` available anywhere on your shell `PATH`.
+
+You can also install the current folder globally without linking:
+
+```bash
+npm run build
+npm install -g .
+```
+
+After either install method:
+
+```bash
+obsidian-tui-reader /path/to/your/obsidian-vault
 ```
 
 ## CLI Usage
