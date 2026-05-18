@@ -225,3 +225,11 @@ The app uses Glow's `tokyo-night` style by default. If Glow is not installed or 
 - AI summaries
 - Editing mode
 - Git integration
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, pull request expectations, and project guidelines.
+
+## License
+
+MIT. See [LICENSE](LICENSE).

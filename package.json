@@ -2,6 +2,7 @@
   "name": "obsidian-tui-reader",
   "version": "0.1.0",
   "description": "A read-only terminal UI for browsing and reading an Obsidian vault.",
+  "license": "MIT",
   "type": "module",
   "bin": {
     "obsidian-tui-reader": "./dist/cli.js"
