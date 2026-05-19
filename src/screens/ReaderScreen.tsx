@@ -205,7 +205,7 @@ type LinkRowProperties = {
 
 function LinkRow({link, isSelected}: LinkRowProperties) {
 	const marker = isSelected ? '>' : ' ';
-	const status = link.isResolved ? link.note?.relativePath : 'unresolved';
+	const status = formatLinkStatus(link);
 	const rowText = `${marker} ${link.link.raw}`;
 
 	return (
@@ -220,4 +220,16 @@ function LinkRow({link, isSelected}: LinkRowProperties) {
 			<Text dimColor> {status}</Text>
 		</Box>
 	);
+}
+
+function formatLinkStatus(link: ResolvedWikiLink): string {
+	if (!link.isResolved) {
+		return 'unresolved';
+	}
+
+	if (link.isAmbiguous) {
+		return `${link.note?.relativePath} · ambiguous (${link.matchCount})`;
+	}
+
+	return link.note?.relativePath ?? 'resolved';
 }

@@ -2,14 +2,16 @@ import type {NoteFile, ResolvedWikiLink, VaultIndex, WikiLink} from '../types.js
 
 export function resolveWikiLink(link: WikiLink, vaultIndex: VaultIndex): ResolvedWikiLink {
 	const normalizedTarget = normalizeLinkTarget(link.target);
-	const note = findBestMatch(normalizedTarget, vaultIndex.notes);
+	const match = findBestMatch(normalizedTarget, vaultIndex.notes);
 
 	return {
 		link,
 		displayText: link.alias ?? normalizedTarget,
 		normalizedTarget,
-		...(note ? {note} : {}),
-		isResolved: Boolean(note),
+		...(match.note ? {note: match.note} : {}),
+		isResolved: Boolean(match.note),
+		isAmbiguous: match.matchCount > 1,
+		matchCount: match.matchCount,
 	};
 }
 
@@ -20,38 +22,55 @@ export function resolveWikiLinks(
 	return links.map((link) => resolveWikiLink(link, vaultIndex));
 }
 
-function findBestMatch(target: string, notes: NoteFile[]): NoteFile | undefined {
+function findBestMatch(target: string, notes: NoteFile[]): {
+	note: NoteFile | undefined;
+	matchCount: number;
+} {
 	const targetWithoutExtension = stripMarkdownExtension(target);
-	const exactRelativePathMatch = notes.find(
+	const exactRelativePathMatches = notes.filter(
 		(note) => stripMarkdownExtension(note.relativePath) === targetWithoutExtension,
 	);
 
-	if (exactRelativePathMatch) {
-		return exactRelativePathMatch;
+	if (exactRelativePathMatches.length > 0) {
+		return {
+			note: exactRelativePathMatches[0],
+			matchCount: exactRelativePathMatches.length,
+		};
 	}
 
-	const exactFilenameMatch = notes.find(
+	const exactFilenameMatches = notes.filter(
 		(note) => stripMarkdownExtension(note.filename) === targetWithoutExtension,
 	);
 
-	if (exactFilenameMatch) {
-		return exactFilenameMatch;
+	if (exactFilenameMatches.length > 0) {
+		return {
+			note: exactFilenameMatches[0],
+			matchCount: exactFilenameMatches.length,
+		};
 	}
 
-	const exactTitleMatch = notes.find((note) => note.title === targetWithoutExtension);
+	const exactTitleMatches = notes.filter((note) => note.title === targetWithoutExtension);
 
-	if (exactTitleMatch) {
-		return exactTitleMatch;
+	if (exactTitleMatches.length > 0) {
+		return {
+			note: exactTitleMatches[0],
+			matchCount: exactTitleMatches.length,
+		};
 	}
 
 	const fallbackTarget = targetWithoutExtension.toLowerCase();
-	return notes.find((note) => {
+	const fallbackMatches = notes.filter((note) => {
 		return (
 			stripMarkdownExtension(note.relativePath).toLowerCase() === fallbackTarget ||
 			stripMarkdownExtension(note.filename).toLowerCase() === fallbackTarget ||
 			note.title.toLowerCase() === fallbackTarget
 		);
 	});
+
+	return {
+		note: fallbackMatches[0],
+		matchCount: fallbackMatches.length,
+	};
 }
 
 function normalizeLinkTarget(target: string): string {

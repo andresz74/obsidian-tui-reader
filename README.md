@@ -1,31 +1,43 @@
 # Obsidian TUI Reader
 
-A read-only terminal app for browsing, searching, and reading an Obsidian vault.
+A keyboard-first terminal reader for exploring Obsidian vaults.
 
-The app is built with Node.js, TypeScript, React, Ink, ESM, and npm. Stage 1 is intentionally read-only: it indexes markdown files, renders notes in the terminal, supports basic search, and lets you follow simple Obsidian wiki links.
+Built with React, Ink, and TypeScript.
 
-![](https://zenteno.org/public_assets/obsidian-tui-reader-001.png)
+Obsidian TUI Reader is a fast, read-only-first terminal app for browsing folders, reading markdown notes, searching vault content, and following Obsidian-style wiki links. It is designed to feel useful over SSH and comfortable in a keyboard-driven terminal workflow.
+
+![Obsidian TUI Reader screenshot](https://zenteno.org/public_assets/obsidian-tui-reader-001.png)
+
+## What It Is
+
+- A terminal-native reader for local Obsidian vaults.
+- A read-only knowledge exploration tool.
+- A React + Ink + TypeScript TUI with clean, small modules.
+- A practical way to browse notes without opening a desktop app.
+
+## What It Is Not
+
+- Not a full Obsidian replacement.
+- Not a WYSIWYG editor.
+- Not an Obsidian plugin host.
+- Not a graph view or sync tool.
+- Not editing-focused, at least for the MVP.
 
 ## Features
 
-- Open a local Obsidian vault folder.
-- Recursively index markdown notes.
-- Ignore `.obsidian`, `.git`, `node_modules`, and `.trash`.
-- Browse folders and markdown notes.
-- Read markdown notes in a terminal-friendly reader.
-- Search title, filename, relative path, tags, and content.
-- Highlight and open outgoing `[[wiki links]]`.
-- Dashboard layout with header, left navigation, main content panel, and footer.
-- `Tab` focus switching between navigation and content.
-- Optional Glow-backed markdown rendering.
-- Load a default vault from `.env`.
-- Skip unreadable nested files/folders and continue indexing readable notes.
+- Browse vault folders and markdown files.
+- Read notes in a full-terminal dashboard layout.
+- Search note titles, filenames, relative paths, tags, and body content.
+- Follow outgoing `[[wiki links]]` from the reader.
+- Show unresolved and ambiguous wiki links without crashing.
+- Ignore common system folders: `.obsidian`, `.git`, `node_modules`, `.trash`.
+- Continue indexing readable notes when nested files or folders are unreadable.
+- Optional Glow-backed markdown rendering with built-in fallback.
+- Installable as a global CLI: `obsidian-tui-reader`.
 
 ## Installation
 
 ### Easy Install From GitHub
-
-Clone and install globally:
 
 ```bash
 git clone https://github.com/andresz74/obsidian-tui-reader.git
@@ -33,56 +45,33 @@ cd obsidian-tui-reader
 ./install.sh
 ```
 
-Then run it from any terminal directory:
+Then run it from anywhere:
 
 ```bash
 obsidian-tui-reader /path/to/your/obsidian-vault
 ```
 
-Or use your `.env` configuration and run:
-
-```bash
-obsidian-tui-reader
-```
-
 ### One-Line Install
-
-If you trust the script, you can install from GitHub in one command:
 
 ```bash
 install_dir="${XDG_DATA_HOME:-$HOME/.local/share}/obsidian-tui-reader" && rm -rf "$install_dir" && git clone --depth 1 https://github.com/andresz74/obsidian-tui-reader.git "$install_dir" && sh "$install_dir/install.sh"
 ```
 
-You can also install directly through npm from GitHub:
+### npm From GitHub
 
 ```bash
 npm install -g github:andresz74/obsidian-tui-reader
 ```
 
-### Local Development Install
-
-From this checkout:
-
-```bash
-npm install
-npm run install:global
-```
-
-To remove the global local link:
-
-```bash
-./uninstall.sh
-```
-
-## Running In Development
+## Usage
 
 Run with an explicit vault path:
 
 ```bash
-npm run dev -- /path/to/your/obsidian-vault
+obsidian-tui-reader ~/Documents/ObsidianVault
 ```
 
-Or create a local `.env` file:
+Or use `.env`:
 
 ```bash
 VAULT_PATH=/path/to/your/obsidian-vault
@@ -92,60 +81,7 @@ MARKDOWN_RENDERER=internal
 Then run:
 
 ```bash
-npm run dev
-```
-
-## Running After Build
-
-Build the project:
-
-```bash
-npm run build
-```
-
-Run the compiled app:
-
-```bash
-npm start -- /path/to/your/obsidian-vault
-```
-
-If `VAULT_PATH` is set in `.env`, this also works:
-
-```bash
-npm start
-```
-
-## Global CLI Usage
-
-This package exposes a binary named `obsidian-tui-reader`.
-
-For local development, the recommended global install is:
-
-```bash
-npm run install:global
-```
-
-This builds the app and runs `npm link`, making `obsidian-tui-reader` available anywhere on your shell `PATH`.
-
-You can also install the current folder globally without linking:
-
-```bash
-npm run build
-npm install -g .
-```
-
-After either install method:
-
-```bash
-obsidian-tui-reader /path/to/your/obsidian-vault
-```
-
-## CLI Usage
-
-The CLI executable is named `obsidian-tui-reader`.
-
-```bash
-obsidian-tui-reader /path/to/your/obsidian-vault
+obsidian-tui-reader
 ```
 
 Path resolution order:
@@ -154,64 +90,64 @@ Path resolution order:
 2. Shell environment variable `VAULT_PATH`
 3. Project `.env` value `VAULT_PATH`
 
-## Optional Glow Renderer
+## Keyboard Shortcuts
 
-The built-in markdown renderer is used by default. To render notes with Glow, install Glow by following the official README:
+- `↑` / `↓`: move selection or scroll
+- `j` / `k`: scroll reader down/up
+- `Enter`: open selected folder, note, search result, or focused wiki link
+- `PageUp` / `PageDown`: scroll reader by larger steps
+- `h` or `Backspace`: go back
+- `/`: open search
+- `Esc`: close search, links mode, or help
+- `l`: focus outgoing links in the reader
+- `Tab`: switch focus between navigation and content
+- `?`: toggle help
+- `q`: quit
 
-```txt
-https://github.com/charmbracelet/glow#installation
-```
+## Supported Obsidian Features
 
-Then set:
+- Local `.md` files.
+- Frontmatter `title` extraction.
+- First H1 title fallback.
+- Basic `#tag` extraction.
+- Wiki links:
+  - `[[Note Name]]`
+  - `[[Folder/Note Name]]`
+  - `[[Note Name|Alias]]`
+  - `[[Note Name#Heading]]`
+
+Heading links resolve the note first, but heading scrolling is not implemented yet.
+
+## Markdown Rendering
+
+The built-in renderer prioritizes terminal readability and supports:
+
+- headings
+- paragraphs
+- bullet lists
+- numbered lists
+- blockquotes
+- fenced code blocks
+- inline code
+- horizontal rules
+- highlighted wiki links
+
+For prettier rendering, install [Glow](https://github.com/charmbracelet/glow#installation) and set:
 
 ```bash
 MARKDOWN_RENDERER=glow
 ```
 
-The app uses Glow's `tokyo-night` style by default. If Glow is not installed or fails to render, the app shows a warning in the Reader and falls back to the built-in renderer.
-
-## Keyboard Shortcuts
-
-- `Tab`: switch focus between left navigation and main content
-- `↑` / `↓`: move selection or scroll reader
-- `j` / `k`: scroll reader down/up
-- `Enter`: open selected folder, note, search result, or focused wiki link
-- `PageUp` / `PageDown`: scroll reader by larger steps
-- `h` or `Backspace`: go back, up a folder, or return from reader
-- `/`: open search from explorer or reader
-- `Esc`: close search or exit link focus mode
-- `l`: focus outgoing links in reader
-- `?`: toggle help
-- `q`: quit
-
-## Supported Obsidian Markdown Features
-
-- Markdown files ending in `.md`
-- Frontmatter `title` extraction
-- First H1 title fallback
-- Headings
-- Paragraphs
-- Bullet lists
-- Numbered lists
-- Blockquotes
-- Fenced code blocks
-- Inline code spans
-- Horizontal rules
-- Basic `#tag` extraction
-- Wiki links:
-  - `[[Note Name]]`
-  - `[[Folder/Note Name]]`
-  - `[[Note Name|Alias]]`
-  - `[[Note Name#Heading]]`, with the heading ignored for now
+Glow uses the `tokyo-night` style by default. If Glow is missing or fails, the app falls back to the built-in renderer.
 
 ## Known Limitations
 
-- Read-only; no editing, file creation, rename, delete, or move.
-- Markdown rendering is intentionally simple and not full CommonMark.
-- Tables, images, embeds, HTML, Mermaid, task checkboxes, and Obsidian callouts are not rendered specially by the built-in renderer.
-- Wiki link heading jumps are not implemented.
-- Ambiguous wiki links pick the first best match.
-- Search is simple substring matching, not fuzzy search.
+- Read-only: no editing, deleting, renaming, or moving notes.
+- Built-in markdown rendering is intentionally incomplete.
+- No table, image, embed, Mermaid, HTML, or Obsidian callout rendering in the built-in renderer.
+- Wiki links do not jump to headings yet.
+- Ambiguous wiki links choose the best match and mark ambiguity in the links panel.
+- Search is simple ranked substring matching, not fuzzy search.
 - No file watching or live refresh yet.
 
 ## Roadmap
@@ -221,14 +157,53 @@ The app uses Glow's `tokyo-night` style by default. If Glow is not installed or 
 - Tags view
 - Daily notes view
 - Fuzzy search
+- Command palette
 - Note preview
-- AI summaries
-- Editing mode
 - Git integration
+- AI note summaries
+- Optional editing mode later
+
+## Development
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run in development:
+
+```bash
+npm run dev -- /path/to/your/obsidian-vault
+```
+
+Build and run compiled output:
+
+```bash
+npm run build
+npm start -- /path/to/your/obsidian-vault
+```
+
+Required checks:
+
+```bash
+npm run typecheck
+npm run build
+```
+
+## Architecture Notes
+
+- `src/App.tsx`: app state, keyboard routing, and dashboard layout.
+- `src/screens/`: Explorer, Reader, and Search screens.
+- `src/components/`: reusable Ink UI components.
+- `src/lib/`: core logic with no Ink imports: vault scanning, search, markdown parsing, wiki-link parsing/resolution, Glow rendering, and ANSI parsing.
+- `src/types.ts`: shared types.
+
+Core logic should stay independent from Ink where practical. TUI components should remain focused on rendering and input state.
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, pull request expectations, and project guidelines.
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 

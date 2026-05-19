@@ -67,7 +67,7 @@ function searchNote(note: NoteFile, query: string): SearchResult | undefined {
 	const contentIndex = content.indexOf(query);
 
 	if (contentIndex !== -1) {
-		return createResult(note, 'content', 30, createContentSnippet(note.content, contentIndex));
+		return createResult(note, 'content', 30, createContentSnippet(note.content, query));
 	}
 
 	return undefined;
@@ -87,10 +87,12 @@ function createResult(
 	};
 }
 
-function createContentSnippet(content: string, normalizedMatchIndex: number): string {
+function createContentSnippet(content: string, query: string): string {
 	const compactContent = content.replace(/\s+/g, ' ').trim();
-	const start = Math.max(0, normalizedMatchIndex - snippetRadius);
-	const end = Math.min(compactContent.length, normalizedMatchIndex + snippetRadius);
+	const compactMatchIndex = compactContent.toLowerCase().indexOf(query);
+	const matchIndex = compactMatchIndex === -1 ? 0 : compactMatchIndex;
+	const start = Math.max(0, matchIndex - snippetRadius);
+	const end = Math.min(compactContent.length, matchIndex + query.length + snippetRadius);
 	const prefix = start > 0 ? '...' : '';
 	const suffix = end < compactContent.length ? '...' : '';
 

@@ -16,6 +16,8 @@ export type ResolvedWikiLink = {
 	normalizedTarget: string;
 	note?: NoteFile;
 	isResolved: boolean;
+	isAmbiguous: boolean;
+	matchCount: number;
 };
 
 export type NoteFile = {

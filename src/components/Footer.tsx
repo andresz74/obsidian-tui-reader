@@ -21,7 +21,7 @@ function shortcutsForMode(mode: AppMode, focusArea: FocusArea): string {
 	}
 
 	if (mode === 'reader') {
-		return 'tab nav · ↑/↓ or j/k scroll · PgUp/PgDn jump · / search · l links · h/back back · q quit · ? help';
+		return 'tab nav · ↑/↓ or j/k scroll · PgUp/PgDn jump · / search · l links · esc close · h/back back · q quit · ? help';
 	}
 
 	if (mode === 'search') {

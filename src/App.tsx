@@ -106,6 +106,11 @@ export function App({vaultPath, markdownRenderer}: AppProperties) {
 			return;
 		}
 
+		if (key.escape && showHelp) {
+			setShowHelp(false);
+			return;
+		}
+
 		if (key.tab) {
 			setFocusArea((currentFocusArea) =>
 				currentFocusArea === 'navigation' ? 'content' : 'navigation',
@@ -518,9 +523,8 @@ function ErrorState({error}: ErrorStateProperties) {
 		<Box flexDirection="column">
 			<Text color="red">Could not load vault</Text>
 			<Text>{error.message}</Text>
-			{error.code === 'missing-path' ? (
-				<Text dimColor>Usage: obsidian-tui-reader /path/to/vault</Text>
-			) : null}
+			<Text dimColor>Try: obsidian-tui-reader ~/Documents/ObsidianVault</Text>
+			{error.code === 'missing-path' ? <Text dimColor>Or set VAULT_PATH in .env.</Text> : null}
 		</Box>
 	);
 }
