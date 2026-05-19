@@ -15,6 +15,7 @@
     "build": "tsc",
     "start": "node dist/cli.js",
     "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test test/**/*.test.ts",
     "prepare": "npm run build",
     "install:global": "sh ./install.sh",
     "uninstall:global": "sh ./uninstall.sh"

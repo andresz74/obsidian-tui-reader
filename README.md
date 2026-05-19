@@ -188,6 +188,7 @@ Required checks:
 
 ```bash
 npm run typecheck
+npm test
 npm run build
 ```
 
@@ -197,6 +198,7 @@ npm run build
 - `src/screens/`: Explorer, Reader, and Search screens.
 - `src/components/`: reusable Ink UI components.
 - `src/lib/`: core logic with no Ink imports: vault scanning, search, markdown parsing, wiki-link parsing/resolution, Glow rendering, and ANSI parsing.
+- `test/lib/`: focused tests for pure core logic.
 - `src/types.ts`: shared types.
 
 Core logic should stay independent from Ink where practical. TUI components should remain focused on rendering and input state.
